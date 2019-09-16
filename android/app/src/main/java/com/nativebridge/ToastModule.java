@@ -1,8 +1,10 @@
 package com.nativebridge;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -37,8 +39,15 @@ public class ToastModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void show(String message, int duration) {
+  public void show(String message, int duration, Callback errorCallback,
+                   Callback successCallback) {
     Log.e("I was called", "message is "+message);
-    Toast.makeText(getReactApplicationContext(), message, duration).show();
+    if(message != null && !TextUtils.isEmpty(message)){
+      Toast.makeText(getReactApplicationContext(), message, duration).show();
+      successCallback.invoke("it was a success");
+    }else {
+      errorCallback.invoke("ewwwwwww!!!!   you sent an empty message");
+    }
+
   }
 }
